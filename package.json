@@ -1,0 +1,49 @@
+{
+	"name": "e621_tagging_checklist",
+	"version": "1.0.0",
+	"scripts": {
+		"build": "node build.sh"
+	},
+	"author": "",
+	"license": "unlisence",
+	"private": true,
+	"devDependencies": {
+		"browserify": "^16.5.0",
+		"stringify": "^5.2.0",
+		"through2": "^3.0.1"
+	},
+	"eslintConfig": {
+		"extends": "standard",
+		"parserOptions": {
+			"ecmaVersion": 9,
+			"sourceType": "module"
+		},
+		"env": {
+			"browser": true
+		},
+		"rules": {
+			"semi": [
+				"error",
+				"always"
+			],
+			"no-console": "off",
+			"indent": [
+				"error",
+				"tab",
+				{
+					"SwitchCase": 1,
+					"ignoreComments": true
+				}
+			],
+			"no-tabs": "off",
+			"camelcase": "off"
+		}
+	},
+	"dependencies": {},
+	"main": "main.js",
+	"description": "",
+	"eslintIgnore": [
+		"distribution/*",
+		"dependencies/*"
+	]
+}
