@@ -2,6 +2,8 @@
 
 This is a repository that hosts a framework and various implementations of tagging checklists for e621.
 
+![Example image](resources/example_checklist.png)
+
 ## Checklists
 
 Title | Author | About
