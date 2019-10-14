@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         e621 Wiki Tagging Checklist
 // @description  Framework and Implementation of a tagging checklist to upload form of e621
-// @version      1.002.001
+// @version      1.002.002
 // @author       idem
 
 // @license      Unlicense (2019)
@@ -41,12 +41,14 @@ const SetOperations = require('./../../source/set_operations.js');
 Section.create(
 	'Artist',
 	Tag.custom('Artist'),
+	Tag.br(),
 	Tag.label5('The artist of the image')
 );
 
 Section.create(
 	'Copyright',
 	Tag.custom('Copyright'),
+	Tag.br(),
 	Tag.label5('The original series or company a character or game is owned by')
 );
 
@@ -86,7 +88,9 @@ Section.create(
 		'cetacean',
 		'shark',
 		'scalie'].map(Tag.button),
+	Tag.br(),
 	Tag.label5('or do it yourself because you know it'),
+	Tag.br(),
 	Tag.custom('Species')
 );
 
@@ -105,6 +109,7 @@ Section.create(
 		// what e621 has switched to.
 		'cuntboy',
 		'dickgirl'].map(Tag.button),
+	Tag.br(),
 	Tag.label5(Tag.url(
 		'For the love of god, TWYS not TWYK',
 		'https://e621.net/wiki/show/howto:tag_genders'
@@ -148,6 +153,7 @@ Section.create(
 	...[
 		'solo_focus',
 		'duo_focus'].map(Tag.button),
+	Tag.br(),
 	Tag.label5('Solo focus can not have Solo. Duo focus can not have Duo')
 );
 
@@ -219,9 +225,6 @@ Section.create(
 Section.create(
 	'Sex Act',
 	Tag.button('sex'),
-	Tag.label5(''),
-	Tag.custom('male/female'),
-	Tag.label5(''),
 	...[
 		'masturbation',
 		'handjob',
@@ -249,10 +252,12 @@ Section.create(
 		'from_behind',
 		'69_position',
 		'stand_and_carry_position'].map(Tag.button),
+	Tag.br(),
 	Tag.label5(Tag.url(
 		'For more positions',
 		'https://e621.net/wiki/show/tag_group:sex_positions'
 	)),
+	Tag.br(),
 	Tag.custom('custom_position')
 );
 
