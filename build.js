@@ -3,8 +3,8 @@ const stringify = require('stringify');
 const path = require('path');
 const fs = require('fs');
 const source = require('./source/version.json');
-const through = require('through2');
 const { performance } = require('perf_hooks');
+const apply_header = require('./dependencies/prepend-text.js');
 
 build_version('complete');
 build_version('wiki');
@@ -21,7 +21,7 @@ function bundle (folder_name) {
 	return browserify()
 		.add(entry)
 		.transform(stringify(['.css']))
-		.plugin(apply_header, { header: header_string })
+		.plugin(apply_header, header_string)
 		.bundle();
 }
 
@@ -40,9 +40,6 @@ function build_header (options) {
 // @supportURL   https://e621.net/user/show/170289
 ${update_url}${download_url}${icon_url}
 // @match        *://e621.net/post/upload
-
-// @grant        GM_addStyle
-// @grant        GM.addStyle
 // ==/UserScript==
 
 `;
@@ -64,41 +61,5 @@ function build_version (name) {
 	bundle(name).pipe(output_stream).on('finish', () => {
 		const end = performance.now();
 		console.log(`Built package ${name} in ${Math.floor((end - start) * 100) / 100}ms`);
-	});
-}
-
-/*
-	This "apply_header" function, and only the "apply_header" function,
-	is an adaptation of the browserify-userscript-header module found
-	on npm.
-	It is licensed under GPLv3 to Damien Clark <damo.clarky@gmail.com>
-	I make no effort to claim this work as my own. All copyright remains
-	with Damien Clark.
-	Every other piece of copyrightable material belongs to its respective
-	owners.
-*/
-function apply_header (browserify, opts) {
-	const header = opts.header;
-
-	/*  create a transform stream  */
-	const createStream = function () {
-		let firstChunk = true;
-		const stream = through.obj(function (buf, enc, next) {
-			if (firstChunk) {
-				/*  insert the header as the first chunk  */
-				this.push(Buffer.from(header));
-				firstChunk = false;
-			}
-			this.push(buf);
-			next();
-		});
-		stream.label = 'header';
-		return stream;
-	};
-
-	/*  hook into the bundle generation pipeline of Browserify  */
-	browserify.pipeline.get('wrap').push(createStream());
-	browserify.on('reset', function () {
-		browserify.pipeline.get('wrap').push(createStream());
 	});
 }

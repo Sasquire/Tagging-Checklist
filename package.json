@@ -9,8 +9,7 @@
 	"private": true,
 	"devDependencies": {
 		"browserify": "^16.5.0",
-		"stringify": "^5.2.0",
-		"through2": "^3.0.1"
+		"stringify": "^5.2.0"
 	},
 	"eslintConfig": {
 		"extends": "standard",
@@ -43,7 +42,6 @@
 	"main": "main.js",
 	"description": "",
 	"eslintIgnore": [
-		"distribution/*",
-		"dependencies/*"
+		"distribution/*"
 	]
 }

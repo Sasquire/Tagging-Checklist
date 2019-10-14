@@ -2,8 +2,7 @@ const { remove_tag_with_regex, set_node_class } = require('./utils.js');
 const Section = require('./section.js');
 const Tag = require('./nodes/nodes.js');
 const css_string = require('./style.css');
-
-require('./../dependencies/gm4-polyfill.js');
+const { add_style } = require('./../dependencies/add_style.js');
 
 function move_rating () {
 	const old_node = document.getElementById('post_rating_explicit').parentNode;
@@ -82,8 +81,7 @@ function remove_blurbs () {
 };
 
 function init_css () {
-	// eslint-disable-next-line no-undef
-	GM.addStyle(css_string);
+	add_style(css_string);
 }
 
 function init_html () {
