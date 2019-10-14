@@ -7,7 +7,9 @@ This is a repository that hosts a framework and various implementations of taggi
 Title | Author | About
 --- | --- | ---
 [Wiki](checklists/wiki/README.md) | idem | The checklist found on the [wiki](https://e621.net/wiki/show/e621:tagging_checklist).
-[Complete](checklists/complete/README.md) | idem | A checklist that hopes to cover every possible tag.
+~~[Complete](checklists/complete/README.md)~~ | idem | A checklist that hopes to cover every possible tag.
+
+For  any checklist to function, you will need a [userscript manager](https://github.com/OpenUserJs/OpenUserJS.org/wiki/Userscript-Beginners-HOWTO#how-do-i-get-going).
 
 ## Usage
 
@@ -32,6 +34,18 @@ Contributing to checklists is a different story. Checklists can maintain their o
 
 If you use this tool to create a checklist, I urge you to make it public so that it may be used my others. The checklist does not need to be hosted on this repository. As long as there is a link to an install or readme page, that is sufficient.
 
+## Build process
+
+To build the package into a useable userscript, you must have [nodejs](https://nodejs.org/en/) and [npm](https://www.npmjs.com/). Instillation instructions can be found [on npm's website](https://nodejs.org/en/download/package-manager/).
+
+At this point it is useful to read through [The beginner's guide to contributing to a GitHub project](https://akrabat.com/the-beginners-guide-to-contributing-to-a-github-project/). Familiarity with the command line is required.
+
+In the project directory you should install the dependencies with `npm install`.
+
+Finally to bundle all the code run the command `npm run build`. This should run the proper script to produce output code in the distribution folder. To test the code, you must copy the file from the corresponding output file and place it in your userscript manager of choice. Work is being done for a way to avoid this hassle, but currently none have been found.
+
 ## License
 [Unlicense](https://unlicense.org)
 The tagging framework is licensed under the Unlicense. Different checklists have the option to choose a different license. This means that the checklists choice of license is always more important.
+
+Two tools are used in the build process. [Browserify](http://browserify.org/) and [Stringify](https://github.com/livoras/stringify).
