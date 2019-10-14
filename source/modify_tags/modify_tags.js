@@ -7,11 +7,9 @@ const questions = require('./question_tags.js');
 const finals = require('./final_tags.js');
 
 // The node must be passed in, and it represents
-// the section node from where the tags are being
-// added. This is because question sections are
-// defined as having a question class. All tags
-// that would be added from these sections are
-// instead added to the questions box.
+// the node from where the tags are being added.
+// This is because questions are defined by a
+// class attached to the button.
 function modify_tags (tags, adding, node) {
 	if (node.classList.contains('question')) {
 		if (adding === true) {

@@ -1,4 +1,3 @@
-
 function array_cross (a1, a2) {
 	const results = [];
 	for (const v1 of a1) {

@@ -5,7 +5,7 @@ function label_generic (...text) {
 			return e;
 		} else {
 			const span = document.createElement('span');
-			span.innerText = e;
+			span.textContent = e;
 			return span;
 		}
 	});
@@ -13,18 +13,18 @@ function label_generic (...text) {
 	nodes.forEach(e => label.appendChild(e));
 
 	return label;
-};
+}
 
 function url_elem (text, link) {
 	const node = document.createElement('a');
 	node.href = link;
-	node.innerText = text;
+	node.textContent = text;
 	return node;
-};
+}
 
 function br_elem () {
 	return document.createElement('br');
-};
+}
 
 const labels = {};
 

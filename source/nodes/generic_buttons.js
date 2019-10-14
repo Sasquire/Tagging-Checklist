@@ -1,55 +1,52 @@
 const Tags = require('./../modify_tags/modify_tags.js');
-const { highlight_section_of, set_node_class } = require('./../utils.js');
+const { set_node_class, highlight_section_of } = require('./../utils.js');
+const { standardize } = require('./standardize_options.js');
 
-function apply_tags (event) {
-	event.preventDefault();
-	const node = event.target;
-
-	let is_lit = node.classList.contains('highlighted');
-	set_node_class(node, 'highlighted', !is_lit);
-	highlight_section_of(node);
-
-	const should_add = !is_lit;
-	const to_be_changed = node.dataset.tags.split(' ');
-	Tags.modify(to_be_changed, should_add, node.parentNode.parentNode);
-}
-
-function create_button (settings) {
-	if (settings.tags === undefined) {
-		throw new Error('Tags must be defined when creating a button');
-	}
-
-	settings.title = settings.title || settings.tags[0];
-	settings.requires = settings.requires || '';
-
+function create_button (options) {
 	const button = document.createElement('button');
 	button.type = 'button';
 	button.classList.add('hidable');
 
 	// Custom data values
-	button.dataset.tags = settings.tags.join(' ');
-	button.innerText = settings.title;
-	button.dataset.requires = settings.requires;
+	button.dataset.tags = options.tags.join(' ');
+	button.dataset.requires = options.requires;
+	button.textContent = options.title;
+
+	if (options.reminder) {
+		button.title = options.reminder;
+	}
+	if (options.question) {
+		button.classList.add('question');
+	}
 
 	button.addEventListener('click', apply_tags);
 
 	return button;
 }
 
-function button (settings_name) {
-	if (typeof settings_name === 'string') {
-		settings_name = { tags: [settings_name] };
-	}
+function apply_tags (event) {
+	event.preventDefault();
+	const button = event.target;
 
-	return create_button(settings_name);
-};
+	let is_lit = button.classList.contains('highlighted');
+	set_node_class(button, 'highlighted', !is_lit);
+	highlight_section_of(button);
 
-function alias (title, actual) {
-	return create_button({
-		title: title,
-		tags: [actual]
-	});
-};
+	const should_add = !is_lit;
+	const to_be_changed = button.dataset.tags.split(' ');
+	Tags.modify(to_be_changed, should_add, button);
+}
+
+function button (options) {
+	options = standardize(options);
+	return create_button(options);
+}
+
+function alias (options, fake_name) {
+	options = standardize(options);
+	options.title = fake_name;
+	return create_button(options);
+}
 
 module.exports = {
 	button: button,

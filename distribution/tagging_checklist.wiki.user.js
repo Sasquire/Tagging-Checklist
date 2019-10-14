@@ -1,8 +1,10 @@
 // ==UserScript==
 // @name         e621 Wiki Tagging Checklist
 // @description  Framework and Implementation of a tagging checklist to upload form of e621
-// @version      1.001.001
+// @version      1.002.001
 // @author       idem
+
+// @license      Unlicense (2019)
 
 // @namespace    https://github.com/Sasquire/
 // @supportURL   https://e621.net/user/show/170289
@@ -22,7 +24,7 @@ const Tags = require('./../../source/modify_tags/modify_tags.js');
 
 Requires.apply(Tags.all());
 
-},{"./../../source/modify_tags/modify_tags.js":8,"./../../source/requires.js":15}],3:[function(require,module,exports){
+},{"./../../source/modify_tags/modify_tags.js":8,"./../../source/requires.js":16}],3:[function(require,module,exports){
 const Init = require('./../../source/init.js');
 
 Init.everything();
@@ -355,7 +357,7 @@ Section.create(
 	Tag.custom('millennia old')
 );
 
-},{"./../../source/nodes/nodes.js":14,"./../../source/section.js":16,"./../../source/set_operations.js":17}],5:[function(require,module,exports){
+},{"./../../source/nodes/nodes.js":14,"./../../source/section.js":17,"./../../source/set_operations.js":18}],5:[function(require,module,exports){
 function add_style (css) {
 	const node = document.createElement('style');
 	node.type = 'text/css';
@@ -406,7 +408,7 @@ function move_rating () {
 		const parent = node.parentNode;
 		parent.insertBefore(br, next);
 	}
-};
+}
 
 function generic_replace (old_id, new_title, new_placeholder) {
 	const old_node = document.getElementById(old_id);
@@ -422,7 +424,7 @@ function generic_replace (old_id, new_title, new_placeholder) {
 	old_node.addEventListener('change', () => {
 		set_node_class(old_node.parentNode.parentNode, 'highlighted', true);
 	});
-};
+}
 
 function move_sources (new_placeholder) {
 	generic_replace(
@@ -430,7 +432,7 @@ function move_sources (new_placeholder) {
 		'Sources',
 		new_placeholder
 	);
-};
+}
 
 function move_description (new_placeholder) {
 	generic_replace(
@@ -438,7 +440,7 @@ function move_description (new_placeholder) {
 		'Description',
 		new_placeholder
 	);
-};
+}
 
 function move_parent_id (new_placeholder) {
 	generic_replace(
@@ -451,7 +453,7 @@ function move_parent_id (new_placeholder) {
 function remove_blurbs () {
 	remove_tag_with_regex('p', /.*Explicit tags include.*/gu);
 	remove_tag_with_regex('p', /.*Separate tags with.*/gu);
-};
+}
 
 function init_css () {
 	add_style(css_string);
@@ -462,7 +464,7 @@ function init_html () {
 	questions.id = 'question_keys';
 	questions.classList.add('hidden');
 	document.body.appendChild(questions);
-};
+}
 
 function init_everything () {
 	init_css();
@@ -478,7 +480,7 @@ module.exports = {
 	parent_id: move_parent_id
 };
 
-},{"./../dependencies/add_style.js":5,"./nodes/nodes.js":14,"./section.js":16,"./style.css":18,"./utils.js":19}],7:[function(require,module,exports){
+},{"./../dependencies/add_style.js":5,"./nodes/nodes.js":14,"./section.js":17,"./style.css":19,"./utils.js":20}],7:[function(require,module,exports){
 // This module focuses on interactions with
 // the post_tags element on the upload page of
 // e621. In the future it should interact cleanly
@@ -516,7 +518,7 @@ module.exports = {
 	remove: remove
 };
 
-},{"./../../source/requires.js":15}],8:[function(require,module,exports){
+},{"./../../source/requires.js":16}],8:[function(require,module,exports){
 // This file is the interaction between the
 // question tags and the final tags. This should
 // be the area in which the rest of the script
@@ -526,11 +528,9 @@ const questions = require('./question_tags.js');
 const finals = require('./final_tags.js');
 
 // The node must be passed in, and it represents
-// the section node from where the tags are being
-// added. This is because question sections are
-// defined as having a question class. All tags
-// that would be added from these sections are
-// instead added to the questions box.
+// the node from where the tags are being added.
+// This is because questions are defined by a
+// class attached to the button.
 function modify_tags (tags, adding, node) {
 	if (node.classList.contains('question')) {
 		if (adding === true) {
@@ -594,20 +594,27 @@ module.exports = {
 	remove: remove
 };
 
-},{"./../../source/requires.js":15}],10:[function(require,module,exports){
+},{"./../../source/requires.js":16}],10:[function(require,module,exports){
 const Tags = require('./../modify_tags/modify_tags.js');
 const { highlight_section_of } = require('./../utils.js');
+const { standardize } = require('./standardize_options.js');
 
-function custom_tag (title) {
+function create_custom (options) {
 	const container = document.createElement('span');
+	if (options.reminder) {
+		container.title = options.reminder;
+	}
+	if (options.question) {
+		container.classList.add('question');
+	}
 
 	const input = document.createElement('input');
 	input.setAttribute('form', 'fake_form'); // Prevents accidental submission
 	input.type = 'text';
-	input.placeholder = title;
+	input.placeholder = options.title;
 
 	const button = document.createElement('button');
-	button.innerText = 'Add';
+	button.textContent = 'Add';
 	button.type = 'button';
 	button.addEventListener('click', apply_tags);
 
@@ -615,23 +622,28 @@ function custom_tag (title) {
 	container.appendChild(button);
 
 	return container;
-};
+}
 
 function apply_tags (event) {
 	const container = event.target.parentNode;
 	const input = container.getElementsByTagName('input')[0];
 
 	event.preventDefault(); // Prevent the form from being submitted
-	Tags.modify(input.value, true, container.parentNode.parentNode);
+	Tags.modify(input.value, true, container);
 	input.value = '';
 	highlight_section_of(container);
 }
 
+function custom (options) {
+	options = standardize(options);
+	return create_custom(options);
+}
+
 module.exports = {
-	custom: custom_tag
+	custom: custom
 };
 
-},{"./../modify_tags/modify_tags.js":8,"./../utils.js":19}],11:[function(require,module,exports){
+},{"./../modify_tags/modify_tags.js":8,"./../utils.js":20,"./standardize_options.js":15}],11:[function(require,module,exports){
 function label_generic (...text) {
 	const label = document.createElement('label');
 	const nodes = text.map(e => {
@@ -639,7 +651,7 @@ function label_generic (...text) {
 			return e;
 		} else {
 			const span = document.createElement('span');
-			span.innerText = e;
+			span.textContent = e;
 			return span;
 		}
 	});
@@ -647,18 +659,18 @@ function label_generic (...text) {
 	nodes.forEach(e => label.appendChild(e));
 
 	return label;
-};
+}
 
 function url_elem (text, link) {
 	const node = document.createElement('a');
 	node.href = link;
-	node.innerText = text;
+	node.textContent = text;
 	return node;
-};
+}
 
 function br_elem () {
 	return document.createElement('br');
-};
+}
 
 const labels = {};
 
@@ -682,101 +694,85 @@ module.exports = {
 
 },{}],12:[function(require,module,exports){
 const Tags = require('./../modify_tags/modify_tags.js');
-const { highlight_section_of, set_node_class } = require('./../utils.js');
+const { set_node_class, highlight_section_of } = require('./../utils.js');
+const { standardize } = require('./standardize_options.js');
 
-function apply_tags (event) {
-	event.preventDefault();
-	const node = event.target;
-
-	let is_lit = node.classList.contains('highlighted');
-	set_node_class(node, 'highlighted', !is_lit);
-	highlight_section_of(node);
-
-	const should_add = !is_lit;
-	const to_be_changed = node.dataset.tags.split(' ');
-	Tags.modify(to_be_changed, should_add, node.parentNode.parentNode);
-}
-
-function create_button (settings) {
-	if (settings.tags === undefined) {
-		throw new Error('Tags must be defined when creating a button');
-	}
-
-	settings.title = settings.title || settings.tags[0];
-	settings.requires = settings.requires || '';
-
+function create_button (options) {
 	const button = document.createElement('button');
 	button.type = 'button';
 	button.classList.add('hidable');
 
 	// Custom data values
-	button.dataset.tags = settings.tags.join(' ');
-	button.innerText = settings.title;
-	button.dataset.requires = settings.requires;
+	button.dataset.tags = options.tags.join(' ');
+	button.dataset.requires = options.requires;
+	button.textContent = options.title;
+
+	if (options.reminder) {
+		button.title = options.reminder;
+	}
+	if (options.question) {
+		button.classList.add('question');
+	}
 
 	button.addEventListener('click', apply_tags);
 
 	return button;
 }
 
-function button (settings_name) {
-	if (typeof settings_name === 'string') {
-		settings_name = { tags: [settings_name] };
-	}
+function apply_tags (event) {
+	event.preventDefault();
+	const button = event.target;
 
-	return create_button(settings_name);
-};
+	let is_lit = button.classList.contains('highlighted');
+	set_node_class(button, 'highlighted', !is_lit);
+	highlight_section_of(button);
 
-function alias (title, actual) {
-	return create_button({
-		title: title,
-		tags: [actual]
-	});
-};
+	const should_add = !is_lit;
+	const to_be_changed = button.dataset.tags.split(' ');
+	Tags.modify(to_be_changed, should_add, button);
+}
+
+function button (options) {
+	options = standardize(options);
+	return create_button(options);
+}
+
+function alias (options, fake_name) {
+	options = standardize(options);
+	options.title = fake_name;
+	return create_button(options);
+}
 
 module.exports = {
 	button: button,
 	alias: alias
 };
 
-},{"./../modify_tags/modify_tags.js":8,"./../utils.js":19}],13:[function(require,module,exports){
+},{"./../modify_tags/modify_tags.js":8,"./../utils.js":20,"./standardize_options.js":15}],13:[function(require,module,exports){
 const Tags = require('./../modify_tags/modify_tags.js');
-const { highlight_section_of, set_node_class } = require('./../utils.js');
+const { highlight_option_tree } = require('./../utils.js');
+const { standardize } = require('./standardize_options.js');
 
-function create_list (settings, ...options) {
-	[settings, options] = clean_settings(settings, ...options);
-	return build_select(settings, ...options);
-};
-
-function clean_settings (settings, ..._options) {
-	settings.title = settings.title || '';
-	settings.requires = settings.requires || '';
-
-	const options = [];
-	for (const setting of _options) {
-		if (!setting.tags) {
-			throw new Error('tags must be present on a setting');
-		}
-
-		setting.title = setting.title || setting.tags[0];
-		setting.requires = setting.requires || '';
-
-		options.push(setting);
-	}
-
-	return [settings, options];
-}
-
-function build_select (settings, ...options) {
-	const select = document.createElement('select');
-	select.name = settings.title;
-	select.appendChild(create_option({
+function create_dummy_option (info) {
+	return {
 		tags: [''],
 		requires: '',
-		title: settings.title
-	}));
+		title: info.title
+	};
+}
 
-	options
+function create_select (info, ...options) {
+	const select = document.createElement('select');
+	select.name = info.title;
+	select.dataset.requires = info.requires;
+	if (info.reminder) {
+		select.title = info.reminder;
+	}
+	// A select can not be a question. Its options must be questions.
+	// A select can not have tags, only the options can have tags
+
+	[create_dummy_option(info)]
+		.concat(options)
 		.map(create_option)
 		.forEach(e => select.appendChild(e));
 
@@ -785,46 +781,46 @@ function build_select (settings, ...options) {
 	return select;
 }
 
-function create_option (opt) {
-	const option = document.createElement('option');
-	option.classList.add('hidable');
-	option.dataset.tags = opt.tags.join(' ');
-	option.dataset.requires = opt.requires;
-	option.innerText = opt.title;
-	return option;
+function create_option (options) {
+	const node = document.createElement('option');
+	node.classList.add('hidable');
+
+	node.dataset.tags = options.tags.join(' ');
+	node.dataset.requires = options.requires;
+	node.textContent = options.title;
+	if (options.reminder) {
+		node.title = options.reminder;
+	}
+	if (options.question) {
+		node.classList.add('question');
+	}
+
+	return node;
 }
 
 function apply_tags (event) {
 	const select = event.target;
 	const selected = select.options[select.selectedIndex];
 	const tags = selected.dataset.tags;
-	Tags.modify(tags, true, select.parentNode.parentNode);
+
+	Tags.modify(tags, true, selected);
+
 	select.selectedIndex = 0; // Reset
-	set_node_class(select, 'highlighted', true);
-	highlight_section_of(select);
+	highlight_option_tree(select);
 }
 
 function list (title, ...others) {
-	if (typeof title === 'string') {
-		title = { title: title };
-	}
+	title = standardize(title);
+	others = others.map(standardize);
 
-	others = others.map(e => {
-		if (typeof e === 'string') {
-			e = { tags: [e] };
-		}
-
-		return e;
-	});
-
-	return create_list(title, ...others);
-};
+	return create_select(title, ...others);
+}
 
 module.exports = {
 	list: list
 };
 
-},{"./../modify_tags/modify_tags.js":8,"./../utils.js":19}],14:[function(require,module,exports){
+},{"./../modify_tags/modify_tags.js":8,"./../utils.js":20,"./standardize_options.js":15}],14:[function(require,module,exports){
 const custom_tags = require('./custom_tags.js');
 const elements = require('./elements.js');
 const generic_buttons = require('./generic_buttons.js');
@@ -838,6 +834,44 @@ module.exports = {
 };
 
 },{"./custom_tags.js":10,"./elements.js":11,"./generic_buttons.js":12,"./lists.js":13}],15:[function(require,module,exports){
+function standardize_options (options) {
+	// options.title <String>
+	// options.tags <String[]>
+	// options.requires <String>
+	// options.reminder <String>
+	// options.question <Boolean>
+
+	if (typeof options === 'string') {
+		options = {
+			tags: [options],
+			title: options
+		};
+	}
+
+	if (options.title && !options.tags) {
+		options.tags = [options.title];
+	}
+
+	if (options.tags === undefined) {
+		throw new Error('Tags must be defined');
+	}
+
+	if (!options.title) {
+		options.title = options.tags.join(' ');
+	}
+
+	options.requires = options.requires || '';
+
+	// reminder and question are optional
+
+	return options;
+}
+
+module.exports = {
+	standardize: standardize_options
+};
+
+},{}],16:[function(require,module,exports){
 const { set_node_class } = require('./utils.js');
 
 function test_requires (requires_string, tags) {
@@ -902,8 +936,22 @@ module.exports = {
 	apply: toggle_hidden_button_sections
 };
 
-},{"./utils.js":19}],16:[function(require,module,exports){
+},{"./utils.js":20}],17:[function(require,module,exports){
 const { set_node_class } = require('./utils.js');
+
+function standardize (options) {
+	if (typeof options === 'string') {
+		options = {
+			title: options,
+			requires: ''
+		};
+	}
+
+	options.title = options.title || '';
+	options.requires = options.requires || '';
+
+	return options;
+}
 
 function append_section (node) {
 	const spacer = document.getElementsByClassName('spacer-row')[0];
@@ -911,23 +959,13 @@ function append_section (node) {
 }
 
 function make_raw (settings, ...nodes) {
-	if (typeof settings === 'string') {
-		settings = {
-			title: settings,
-			requires: ''
-		};
-	}
-
-	settings.title = settings.title || '';
-	settings.requires = settings.requires || '';
-
 	const section = document.createElement('tr');
 	section.classList.add('hidable');
 	section.dataset.requires = settings.requires;
 
 	// Create header on the left
 	const header = document.createElement('td');
-	header.innerText = settings.title;
+	header.textContent = settings.title;
 	header.addEventListener('click', () => {
 		const is_lit = header.parentNode.classList.contains('highlighted');
 		set_node_class(header.parentNode, 'highlighted', !is_lit);
@@ -942,23 +980,16 @@ function make_raw (settings, ...nodes) {
 	return section;
 };
 
-function create_section (settings, ...nodes) {
-	append_section(make_raw(settings, ...nodes));
-}
-
-function question_section (settings, ...nodes) {
-	const section = make_raw(settings, ...nodes);
-	section.classList.add('question');
-	append_section(section);
+function section (options, ...nodes) {
+	options = standardize(options);
+	append_section(make_raw(options, ...nodes));
 }
 
 module.exports = {
-	create: create_section,
-	question: question_section
+	create: section
 };
 
-},{"./utils.js":19}],17:[function(require,module,exports){
-
+},{"./utils.js":20}],18:[function(require,module,exports){
 function array_cross (a1, a2) {
 	const results = [];
 	for (const v1 of a1) {
@@ -994,10 +1025,10 @@ module.exports = {
 	self_half_cross: self_half_cross
 };
 
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 module.exports = ".hidden { display: none; }\n\n.section button {\n\tmargin-right: 3px;\n\tborder-radius: 4px;\n\tborder: 1px solid black;\n\tpadding: 2px 6px;\n}\n\n.section input[type=text] {\n\tmargin: 0px;\n\tbox-shadow: none;\n\ttop: 0;\n\theight: 1em;\n\tborder-radius: 3px;\n\tborder: 1px solid black;\n\tpadding: 2px;\n}\n\n.section select {\n\tborder-radius: 3px;\n\tbox-shadow: none;\n\tmargin-top: 0;\n\ttop: 0;\n\tpadding: 0px;\n\tborder: 1px solid black;\n}\n\n.highlighted {\n\tbackground-color: #288233; /* e621 approval green */\n\tcolor: white;\n}\n\n.section td { padding-bottom: 1em; }\n\n/* Bold the title of sections */\n.section td:first-child { font-weight: 700; }\n\n#upload_preview_img {\n\tposition: fixed;\n\tmax-width: 50vw;\n\tright: 0px;\n\ttop: 50px;\n\tmax-height: 50vh;\n\toverflow: initial;\n\tborder: 1px solid white;\n}";
 
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 // Filled with small utilities that are useful
 // across multiple different files
 
@@ -1013,9 +1044,14 @@ function set_node_class (node, classname, should) {
 	}
 }
 
+function highlight_option_tree (node) {
+	highlight_section_of(node);
+	node.classList.add('highlighted');
+}
+
 function find_nodes_with_regex (type, regex) {
 	return Array.from(document.getElementsByTagName(type))
-		.filter(e => regex.test(e.innerText));
+		.filter(e => regex.test(e.textContent));
 }
 
 function remove_tag_with_regex (type, regex) {
@@ -1026,6 +1062,7 @@ function remove_tag_with_regex (type, regex) {
 module.exports = {
 	highlight_section_of: highlight_section_of,
 	set_node_class: set_node_class,
+	highlight_option_tree: highlight_option_tree,
 	find_nodes_with_regex: find_nodes_with_regex,
 	remove_tag_with_regex: remove_tag_with_regex
 };

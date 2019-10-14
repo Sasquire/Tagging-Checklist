@@ -29,12 +29,15 @@ function build_header (options) {
 	const download_url = build_option('downloadURL', options.download_url);
 	const update_url = build_option('updateURL', options.update_url);
 	const icon_url = build_option('icon', options.icon_url);
+	const license = options.license || 'Unlicense';
 
 	return `// ==UserScript==
 // @name         e621 ${options.name} Tagging Checklist
 // @description  Framework and Implementation of a tagging checklist to upload form of e621
 // @version      1.${source.version}.${options.version}
 // @author       ${options.authors.concat('idem').join(', ')}
+
+// @license      ${license} (${new Date().getFullYear()})
 
 // @namespace    https://github.com/Sasquire/
 // @supportURL   https://e621.net/user/show/170289

@@ -1,40 +1,27 @@
 const Tags = require('./../modify_tags/modify_tags.js');
-const { highlight_section_of, set_node_class } = require('./../utils.js');
+const { highlight_option_tree } = require('./../utils.js');
+const { standardize } = require('./standardize_options.js');
 
-function create_list (settings, ...options) {
-	[settings, options] = clean_settings(settings, ...options);
-	return build_select(settings, ...options);
-};
-
-function clean_settings (settings, ..._options) {
-	settings.title = settings.title || '';
-	settings.requires = settings.requires || '';
-
-	const options = [];
-	for (const setting of _options) {
-		if (!setting.tags) {
-			throw new Error('tags must be present on a setting');
-		}
-
-		setting.title = setting.title || setting.tags[0];
-		setting.requires = setting.requires || '';
-
-		options.push(setting);
-	}
-
-	return [settings, options];
-}
-
-function build_select (settings, ...options) {
-	const select = document.createElement('select');
-	select.name = settings.title;
-	select.appendChild(create_option({
+function create_dummy_option (info) {
+	return {
 		tags: [''],
 		requires: '',
-		title: settings.title
-	}));
+		title: info.title
+	};
+}
 
-	options
+function create_select (info, ...options) {
+	const select = document.createElement('select');
+	select.name = info.title;
+	select.dataset.requires = info.requires;
+	if (info.reminder) {
+		select.title = info.reminder;
+	}
+	// A select can not be a question. Its options must be questions.
+	// A select can not have tags, only the options can have tags
+
+	[create_dummy_option(info)]
+		.concat(options)
 		.map(create_option)
 		.forEach(e => select.appendChild(e));
 
@@ -43,40 +30,40 @@ function build_select (settings, ...options) {
 	return select;
 }
 
-function create_option (opt) {
-	const option = document.createElement('option');
-	option.classList.add('hidable');
-	option.dataset.tags = opt.tags.join(' ');
-	option.dataset.requires = opt.requires;
-	option.innerText = opt.title;
-	return option;
+function create_option (options) {
+	const node = document.createElement('option');
+	node.classList.add('hidable');
+
+	node.dataset.tags = options.tags.join(' ');
+	node.dataset.requires = options.requires;
+	node.textContent = options.title;
+	if (options.reminder) {
+		node.title = options.reminder;
+	}
+	if (options.question) {
+		node.classList.add('question');
+	}
+
+	return node;
 }
 
 function apply_tags (event) {
 	const select = event.target;
 	const selected = select.options[select.selectedIndex];
 	const tags = selected.dataset.tags;
-	Tags.modify(tags, true, select.parentNode.parentNode);
+
+	Tags.modify(tags, true, selected);
+
 	select.selectedIndex = 0; // Reset
-	set_node_class(select, 'highlighted', true);
-	highlight_section_of(select);
+	highlight_option_tree(select);
 }
 
 function list (title, ...others) {
-	if (typeof title === 'string') {
-		title = { title: title };
-	}
+	title = standardize(title);
+	others = others.map(standardize);
 
-	others = others.map(e => {
-		if (typeof e === 'string') {
-			e = { tags: [e] };
-		}
-
-		return e;
-	});
-
-	return create_list(title, ...others);
-};
+	return create_select(title, ...others);
+}
 
 module.exports = {
 	list: list

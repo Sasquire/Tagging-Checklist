@@ -33,7 +33,7 @@ function move_rating () {
 		const parent = node.parentNode;
 		parent.insertBefore(br, next);
 	}
-};
+}
 
 function generic_replace (old_id, new_title, new_placeholder) {
 	const old_node = document.getElementById(old_id);
@@ -49,7 +49,7 @@ function generic_replace (old_id, new_title, new_placeholder) {
 	old_node.addEventListener('change', () => {
 		set_node_class(old_node.parentNode.parentNode, 'highlighted', true);
 	});
-};
+}
 
 function move_sources (new_placeholder) {
 	generic_replace(
@@ -57,7 +57,7 @@ function move_sources (new_placeholder) {
 		'Sources',
 		new_placeholder
 	);
-};
+}
 
 function move_description (new_placeholder) {
 	generic_replace(
@@ -65,7 +65,7 @@ function move_description (new_placeholder) {
 		'Description',
 		new_placeholder
 	);
-};
+}
 
 function move_parent_id (new_placeholder) {
 	generic_replace(
@@ -78,7 +78,7 @@ function move_parent_id (new_placeholder) {
 function remove_blurbs () {
 	remove_tag_with_regex('p', /.*Explicit tags include.*/gu);
 	remove_tag_with_regex('p', /.*Separate tags with.*/gu);
-};
+}
 
 function init_css () {
 	add_style(css_string);
@@ -89,7 +89,7 @@ function init_html () {
 	questions.id = 'question_keys';
 	questions.classList.add('hidden');
 	document.body.appendChild(questions);
-};
+}
 
 function init_everything () {
 	init_css();
