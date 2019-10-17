@@ -1,9 +1,22 @@
+function standardize_header (options) {
+	if (options.title === undefined) {
+		throw new Error('A title of the section must be defined');
+	}
+
+	if (typeof options.levels === 'string') {
+		options.levels = [options.levels];
+	}
+
+	return options;
+}
+
 function append_section (node) {
 	document.getElementById('record_table_body').appendChild(node);
 }
 
 function make_raw (settings, ...nodes) {
 	const section = document.createElement('tr');
+	section.dataset.levels = JSON.stringify(settings.levels);
 
 	// Create header on the left
 	const header = document.createElement('td');
@@ -19,6 +32,7 @@ function make_raw (settings, ...nodes) {
 };
 
 function section (options, ...nodes) {
+	options = standardize_header(options);
 	append_section(make_raw(options, ...nodes));
 }
 

@@ -42,6 +42,12 @@ function build_header (options) {
 // @supportURL   https://e621.net/user/show/170289
 ${update_url}${download_url}${icon_url}
 // @match        *://e621.net/user_record/create?user_id=*
+// @match        *://e621.net/user_record/edit*
+// @match        *://e621.net/user/block/*
+
+// @match        *://e926.net/user_record/create?user_id=*
+// @match        *://e926.net/user_record/edit*
+// @match        *://e926.net/user/block/*
 // ==/UserScript==
 
 `;

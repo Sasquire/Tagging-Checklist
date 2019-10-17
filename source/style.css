@@ -1,3 +1,7 @@
+#record_table .hidden {
+	display: none;
+}
+
 #record_table button {
 	margin-right: 3px;
 	border-radius: 4px;

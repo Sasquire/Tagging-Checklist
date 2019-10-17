@@ -1,21 +1,23 @@
 const Section = require('./../../source/section.js');
 const Tag = require('./../../source/nodes/nodes.js');
 
+// ['negative', 'neutral', 'positive']
+
 Section.create(
 	{
-		title: 'Sampletext',
-		levels: ['neutral']
+		title: 'Bad things',
+		levels: ['negative']
 	},
 
 	...[{
-		title: 'Solicitation',
-		records: '[[e621:rules#solicitation|Solicitation]]'
+		title: 'a',
+		records: 'a'
 	}, {
-		title: 'Spamming or Trolling',
-		records: '[[e621:rules#spamming|Spamming or Trolling]]'
+		title: 'b',
+		records: 'b'
 	}, {
-		title: 'Tagging Abuse / Tagging Vandalism',
-		records: '[[e621:rules#taggingabuse|Tagging Abuse / Tagging Vandalism]]'
+		title: 'c',
+		records: 'c'
 	}, {
 		title: 'fun',
 		records: [
@@ -29,5 +31,59 @@ Section.create(
 			'8',
 			'9'
 		]
+	}].map(Tag.button)
+);
+
+Section.create(
+	{
+		title: 'Okay things',
+		levels: ['neutral']
+	},
+
+	...[{
+		title: 'd',
+		records: 'd'
+	}, {
+		title: 'e',
+		records: 'e'
+	}, {
+		title: 'f',
+		records: 'f'
+	}].map(Tag.button)
+);
+
+Section.create(
+	{
+		title: 'Both things',
+		levels: ['negative', 'neutral']
+	},
+
+	...[{
+		title: 'g',
+		records: 'g'
+	}, {
+		title: 'h',
+		records: 'h'
+	}, {
+		title: 'i',
+		records: 'i'
+	}].map(Tag.button)
+);
+
+Section.create(
+	{
+		title: 'Good things',
+		levels: ['positive']
+	},
+
+	...[{
+		title: 'j',
+		records: 'j'
+	}, {
+		title: 'k',
+		records: 'k'
+	}, {
+		title: 'l',
+		records: 'l'
 	}].map(Tag.button)
 );
