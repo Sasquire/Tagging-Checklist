@@ -1,32 +1,14 @@
 function standardize_options (options) {
 	// options.title <String>
-	// options.tags <String[]>
-	// options.requires <String>
-	// options.reminder <String>
-	// options.question <Boolean>
+	// options.records <String[]>
 
-	if (typeof options === 'string') {
-		options = {
-			tags: [options],
-			title: options
-		};
+	if (!options.title || !options.records) {
+		throw new Error('title and records must both be defined');
 	}
 
-	if (options.title && !options.tags) {
-		options.tags = [options.title];
+	if (typeof options.records === 'string') {
+		options.records = [options.records];
 	}
-
-	if (options.tags === undefined) {
-		throw new Error('Tags must be defined');
-	}
-
-	if (!options.title) {
-		options.title = options.tags.join(' ');
-	}
-
-	options.requires = options.requires || '';
-
-	// reminder and question are optional
 
 	return options;
 }
