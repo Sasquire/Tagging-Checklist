@@ -1,7 +1,6 @@
 const css_string = require('./style.css');
 const { add_style } = require('./../dependencies/add_style.js');
 const filter_sections = require('./hide_nodes.js');
-const is_ban = require('./is_ban.js');
 
 function remove_toJSON () {
 	delete Object.prototype.toJSON;
@@ -37,8 +36,8 @@ function init_everything () {
 }
 
 function init_watcher () {
-	if (is_ban === false) {
-		const select = document.getElementById('user_record_score');
+	const select = document.getElementById('user_record_score');
+	if (select) {
 		select.addEventListener('change', filter_sections);
 	}
 }

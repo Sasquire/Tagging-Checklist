@@ -1,9 +1,9 @@
-const is_ban = require('./is_ban.js');
+const { is_ban } = require('./site.js');
 
 module.exports = (text) => {
 	if (is_ban) {
-		document.getElementById('ban_reason').value += text;
+		document.getElementById('ban_reason').value += text + ' ';
 	} else {
-		document.getElementById('user_record_body').value += text;
+		document.getElementById('user_record_body').value += text + ' ';
 	}
 };

@@ -1,4 +1,4 @@
-const is_ban = require('./is_ban.js');
+const { is_ban } = require('./site.js');
 
 function apply_level (level) {
 	const sections = document.querySelectorAll('#record_table_body > tr');

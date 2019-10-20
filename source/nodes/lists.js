@@ -2,18 +2,18 @@ const add_record = require('./../add_record.js');
 const { random_from_node } = require('./../utils.js');
 const { standardize } = require('./standardize_options.js');
 
-function create_dummy_option (info) {
+function create_dummy_option (title) {
 	return {
-		title: info.title,
+		title: title,
 		records: ['']
 	};
 }
 
-function create_select (info, ...options) {
+function create_select (title, ...options) {
 	const select = document.createElement('select');
-	select.name = info.title;
+	select.name = title;
 
-	[create_dummy_option(info)]
+	[create_dummy_option(title)]
 		.concat(options)
 		.map(create_option)
 		.forEach(e => select.appendChild(e));
@@ -43,7 +43,6 @@ function apply_records (event) {
 }
 
 function list (title, ...others) {
-	title = standardize(title);
 	others = others.map(standardize);
 
 	return create_select(title, ...others);
