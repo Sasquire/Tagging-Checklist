@@ -62,7 +62,7 @@ Section.create(
 	Record.button({
 		title: 'Tag Nuking',
 		records: r(
-			`"Don't mass remove tags from posts.":__SOURCE_URL__ Even if the post is going to be deleted or has been flagged, we need to keep the tag for various reasons, for example:`,
+			`"Don't mass remove tags from posts.": Even if the post is going to be deleted or has been flagged, we need to keep the tag for various reasons, for example:`,
 			``,
 			`* People's blacklist will not work and will see it [b]even if it is flagged[/b].`,
 			`* We need to be able to go back and easily check if something has been deleted before.`,

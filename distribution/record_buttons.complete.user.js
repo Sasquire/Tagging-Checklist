@@ -8,6 +8,7 @@
 
 // @namespace    https://github.com/Sasquire/
 // @supportURL   https://e621.net/user/show/170289
+// @downloadURL  https://raw.githubusercontent.com/Sasquire/Tagging-Checklist/record-buttons/distribution/record_buttons.complete.user.js
 
 // @match        *://e621.net/user_record/create?user_id=*
 // @match        *://e621.net/user_record/edit*
@@ -83,7 +84,7 @@ Section.create(
 	Record.button({
 		title: 'Tag Nuking',
 		records: r(
-			`"Don't mass remove tags from posts.":__SOURCE_URL__ Even if the post is going to be deleted or has been flagged, we need to keep the tag for various reasons, for example:`,
+			`"Don't mass remove tags from posts.": Even if the post is going to be deleted or has been flagged, we need to keep the tag for various reasons, for example:`,
 			``,
 			`* People's blacklist will not work and will see it [b]even if it is flagged[/b].`,
 			`* We need to be able to go back and easily check if something has been deleted before.`,
@@ -604,7 +605,7 @@ const Record = require('./../../source/nodes/nodes.js');
 function create_source_text (n) {
 	return Array(n)
 		.fill(0)
-		.map((e, i) => `"[${i + 1}]":__SOURCE_URL__`)
+		.map((e, i) => `"[${i + 1}]":`)
 		.join(' ');
 }
 
@@ -617,7 +618,7 @@ Section.create(
 	Record.list(
 		'Sources', {
 			title: 'One',
-			records: '"[Source]":__SOURCE_URL__'
+			records: '"[Source]":'
 		}, {
 			title: 'Five',
 			records: create_source_text(5)
@@ -639,12 +640,91 @@ Section.create(
 		}
 	),
 
-	Record.br(),
-
 	Record.button({
 		title: '+[[wiki]]',
-		records: '[color=black]+[/color][[__WIKI_LINK__]]'
-	})
+		records: '[color=black]+[/color][[]]'
+	}),
+
+	Record.br(),
+
+	Record.list(
+		'Blacklist Phrases', {
+			title: 'Use it',
+			records: '"(Blacklist)":/user/edit Use it.'
+		}, {
+			title: 'Link',
+			records: 'Blacklist. "(Blacklist)":/user/edit'
+		}, {
+			title: 'Use your',
+			records: 'Use your blacklist. "(Blacklist)":/user/edit'
+		}, {
+			title: 'Please',
+			records: 'Please use your blacklist. "(Blacklist)":/user/edit'
+		}, {
+			title: 'Consider',
+			records: 'Consider using your blacklist rather than complaining. "(Blacklist)":/user/edit'
+		}
+	),
+
+	Record.list(
+		'Creepy Phrases', {
+			title: 'Please WDNTK',
+			records: 'We don\'t need to know that, please keep it to yourself.'
+		}, {
+			title: 'WDNTK',
+			records: 'We don\'t need to know that, keep it to yourself.'
+		}, {
+			title: 'Keep it',
+			records: 'Keep it to yourself.'
+		}, {
+			title: 'Please don\'t',
+			records: 'Please don\'t be creepy.'
+		}, {
+			title: 'Don\'t',
+			records: 'Don\'t be creepy.'
+		}, {
+			title: 'Keep it',
+			records: 'Keep it to yourself.'
+		}, {
+			title: 'Don\'t comment',
+			records: 'Please don\'t make creepy comments.'
+		}, {
+			title: 'Stop',
+			records: 'Stop being creepy.'
+		}
+	),
+
+	Record.list(
+		'Harass Phrases', {
+			title: 'Be nice',
+			records: 'Be nice.'
+		}, {
+			title: 'Please',
+			records: 'Please be nice.'
+		}, {
+			title: 'To peers',
+			records: 'Be nice to your fellow users.'
+		}, {
+			title: 'Please to peers',
+			records: 'Please be nice to your fellow users.'
+		}, {
+			title: 'Don\'t insult',
+			records: 'Don\'t insult people.'
+		}, {
+			title: 'Please Don\'t',
+			records: 'Please don\'t insult people.'
+		}
+	),
+
+	Record.list(
+		'Trolling Phrases', {
+			title: 'Don\'t',
+			records: 'Don\'t be a troll.'
+		}, {
+			title: 'We\'re done',
+			records: 'And we\'re done here.'
+		}
+	)
 );
 
 },{"./../../source/nodes/nodes.js":18,"./../../source/section.js":20}],8:[function(require,module,exports){
