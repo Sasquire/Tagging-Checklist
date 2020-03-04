@@ -6,25 +6,23 @@ const { is_edit } = require('./../../source/site.js');
 if (is_edit) {
 	Section.create(
 		{
-			title: 'Decayed',
-			levels: ['negative']
+			title: 'Decayed', levels: ['negative']
 		},
 
 		Record.button({
-			title: 'Decay from suspension',
-			records: '[b][Decayed from Suspension to Negative.][/b]'
+			title: 'Decay to Negative',
+			records: '[b][Decayed from Suspension to Negative][/b]'
 		})
 	);
 
 	Section.create(
 		{
-			title: 'Decayed',
-			levels: ['neutral']
+			title: 'Decayed', levels: ['neutral']
 		},
 
 		Record.button({
-			title: 'Decay from negative',
-			records: '[b][Decayed from Negative to Neutral.][/b]'
+			title: 'Decay to Neutral',
+			records: '[b][Decayed from Negative to Neutral][/b]'
 		})
 	);
 }

@@ -1,6 +1,6 @@
 {
-	"version": "001",
-	"authors": [],
+	"version": "002",
+	"authors": ["Millcore"],
 	"name": "Complete",
 	"download_url": "https://raw.githubusercontent.com/Sasquire/Tagging-Checklist/record-buttons/distribution/record_buttons.complete.user.js"
 }
