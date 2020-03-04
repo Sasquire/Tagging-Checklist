@@ -41,13 +41,13 @@ function build_header (options) {
 // @namespace    https://github.com/Sasquire/
 // @supportURL   https://e621.net/user/show/170289
 ${update_url}${download_url}${icon_url}
-// @match        *://e621.net/user_record/create?user_id=*
-// @match        *://e621.net/user_record/edit*
-// @match        *://e621.net/user/block/*
+// @match        *://e621.net/user_feedbacks/new*
+// @match        *://e621.net/user_feedbacks/*/edit
+// @match        *://e621.net/bans/new*
 
-// @match        *://e926.net/user_record/create?user_id=*
-// @match        *://e926.net/user_record/edit*
-// @match        *://e926.net/user/block/*
+// @match        *://e926.net/user_feedbacks/new*
+// @match        *://e926.net/user_feedbacks/*/edit
+// @match        *://e926.net/bans/new*
 // ==/UserScript==
 
 `;

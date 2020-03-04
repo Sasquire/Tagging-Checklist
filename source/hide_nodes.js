@@ -12,10 +12,9 @@ function apply_level (level) {
 }
 
 function find_level () {
-	const select = document.getElementById('user_record_score');
-	const level = parseInt(select.options[select.selectedIndex].value, 10);
-	// 1 is positive, 0 is neutral, -1 is negative
-	return ['negative', 'neutral', 'positive'][level + 1];
+	const select = document.getElementById('user_feedback_category');
+	console.log("level = ", select.options[select.selectedIndex].value);
+	return select.options[select.selectedIndex].value;
 }
 
 function filter () {

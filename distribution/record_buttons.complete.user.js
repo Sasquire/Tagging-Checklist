@@ -4,19 +4,19 @@
 // @version      1.002.001
 // @author       idem
 
-// @license      Unlicense (2019)
+// @license      Unlicense (2020)
 
 // @namespace    https://github.com/Sasquire/
 // @supportURL   https://e621.net/user/show/170289
 // @downloadURL  https://raw.githubusercontent.com/Sasquire/Tagging-Checklist/record-buttons/distribution/record_buttons.complete.user.js
 
-// @match        *://e621.net/user_record/create?user_id=*
-// @match        *://e621.net/user_record/edit*
-// @match        *://e621.net/user/block/*
+// @match        *://e621.net/user_feedbacks/new*
+// @match        *://e621.net/user_feedbacks/*/edit
+// @match        *://e621.net/bans/new*
 
-// @match        *://e926.net/user_record/create?user_id=*
-// @match        *://e926.net/user_record/edit*
-// @match        *://e926.net/user/block/*
+// @match        *://e926.net/user_feedbacks/new*
+// @match        *://e926.net/user_feedbacks/*/edit
+// @match        *://e926.net/bans/new*
 // ==/UserScript==
 
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
@@ -804,7 +804,7 @@ module.exports = (text) => {
 	if (is_ban) {
 		document.getElementById('ban_reason').value += text + ' ';
 	} else {
-		document.getElementById('user_record_body').value += text + ' ';
+		document.getElementById('user_feedback_body').value += text + ' ';
 	}
 };
 
@@ -849,10 +849,9 @@ function apply_level (level) {
 }
 
 function find_level () {
-	const select = document.getElementById('user_record_score');
-	const level = parseInt(select.options[select.selectedIndex].value, 10);
-	// 1 is positive, 0 is neutral, -1 is negative
-	return ['negative', 'neutral', 'positive'][level + 1];
+	const select = document.getElementById('user_feedback_category');
+	console.log("level = ", select.options[select.selectedIndex].value);
+	return select.options[select.selectedIndex].value;
 }
 
 function filter () {
@@ -872,6 +871,7 @@ const { add_style } = require('./../dependencies/add_style.js');
 const filter_sections = require('./hide_nodes.js');
 
 function remove_toJSON () {
+	// Is this even an issue on the new site?
 	delete Object.prototype.toJSON;
 	delete Date.prototype.toJSON;
 	delete String.prototype.toJSON;
@@ -884,7 +884,7 @@ function init_css () {
 }
 
 function init_html () {
-	document.getElementById('content').innerHTML += `
+	document.getElementById('page').innerHTML += `
 	<table id="record_table">
 		<thead>
 			<tr>
@@ -905,7 +905,7 @@ function init_everything () {
 }
 
 function init_watcher () {
-	const select = document.getElementById('user_record_score');
+	const select = document.getElementById('user_feedback_category');
 	if (select) {
 		select.addEventListener('change', filter_sections);
 	}
@@ -1131,12 +1131,12 @@ module.exports = {
 },{}],21:[function(require,module,exports){
 const site = (() => {
 	const path = window.location.pathname;
-	if (path.includes('/user/block')) {
+	if (path.includes('/bans/new')) {
 		return 'ban';
-	} else if (path.includes('/user_record/edit')) {
-		return 'edit';
-	} else {
+	} else if (path.includes('/user_feedbacks/new')) {
 		return 'create';
+	} else {
+		return 'edit';
 	}
 })();
 
